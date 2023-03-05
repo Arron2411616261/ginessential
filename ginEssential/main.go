@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
 	"math/rand"
@@ -19,8 +19,8 @@ type User struct {
 }
 
 func main() {
+
 	db := InitDB()
-	//defer db.Close()
 	r := gin.Default()
 	r.POST("/api/auth/register", func(ctx *gin.Context) {
 		name := ctx.PostForm("name")
@@ -36,7 +36,7 @@ func main() {
 			return
 		}
 		if len(name) == 0 {
-			name = randomString(10)
+			name = RandomString(10)
 		}
 		if isTelephoneExist(db, telephone) {
 			ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "exists"})
@@ -48,6 +48,8 @@ func main() {
 			Password:  password,
 		}
 		db.Create(&newUser)
+
+		//返回结果
 		log.Println(name, telephone, password)
 		ctx.JSON(200, gin.H{
 			"msg": "register successfully",
@@ -65,7 +67,7 @@ func isTelephoneExist(db *gorm.DB, telephone string) bool {
 	return false
 }
 
-func randomString(n int) string {
+func RandomString(n int) string {
 	var letters = []byte("wqyeoriodndjahngklJGIGSFBGFWMNBKSBGMBWIOQPSZVNXMZScxzmhoiewpqjfdnavgcz")
 	result := make([]byte, n)
 
@@ -77,14 +79,13 @@ func randomString(n int) string {
 }
 
 func InitDB() *gorm.DB {
-	//driverName := "mysql"
 	host := "localhost"
 	port := "3306"
 	database := "ginessential"
 	username := "root"
-	password := "root"
+	password := "123456"
 	charset := "utf8"
-	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
 		username,
 		password,
 		host,
@@ -92,9 +93,10 @@ func InitDB() *gorm.DB {
 		database,
 		charset)
 
-	db, err := gorm.Open(sqlite.Open(args), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database, err: " + err.Error())
+		panic("Error to Db connection, err: " + err.Error())
 	}
+	_ = db.AutoMigrate(&User{})
 	return db
 }
