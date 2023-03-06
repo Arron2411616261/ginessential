@@ -28,7 +28,8 @@ func Register(ctx *gin.Context) {
 		name = util.RandomString(10)
 	}
 	if isTelephoneExist(DB, telephone) {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "exists"})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "this telephone exists"})
+		return
 	}
 
 	newUser := model.User{

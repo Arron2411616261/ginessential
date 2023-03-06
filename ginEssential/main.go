@@ -2,10 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"oceanlearn.teach/ginessential/common"
 )
 
 func main() {
-	//db := common.GetDB()
+	common.InitDB()
 	r := gin.Default()
 	r = CollectRoute(r)
 	panic(r.Run())
