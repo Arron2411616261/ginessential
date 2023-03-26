@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import Vuelidate from 'vuelidate';
-import VueAxios from 'vue-axios';
+// import VueAxios from 'vue-axios';
 import axios from 'axios';
 import App from './App.vue';
 import router from './router';
@@ -21,7 +21,7 @@ Vue.use(IconsPlugin);
 
 Vue.use(Vuelidate);
 
-Vue.use(axios, VueAxios);
+Vue.prototype.axios = axios;
 
 new Vue({
   router,

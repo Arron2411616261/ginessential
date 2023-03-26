@@ -77,6 +77,16 @@ export default {
       return $dirty ? !$error : null;
     },
     register() {
+      this.$v.user.$touch();
+      if (this.$v.user.$anyError) {
+        return;
+      }
+      const api = 'http://localhost:1016/api/auth/register';
+      this.axios.post(api, { ...this.user }).then((res) => {
+        console.log(res.data);
+      }).catch((err) => {
+        console.log('err:', err.response.data.msg);
+      });
       console.log('register');
     },
   },

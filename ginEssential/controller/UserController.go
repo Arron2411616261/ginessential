@@ -15,9 +15,12 @@ import (
 
 func Register(ctx *gin.Context) {
 	DB := common.GetDB()
-	name := ctx.PostForm("name")
-	telephone := ctx.PostForm("telephone")
-	password := ctx.PostForm("password")
+	var requestUser = model.User{}
+	ctx.Bind(&requestUser)
+
+	name := requestUser.Name
+	telephone := requestUser.Telephone
+	password := requestUser.Password
 
 	if len(telephone) != 11 {
 		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "the length of the telephone must be 11")
@@ -47,9 +50,15 @@ func Register(ctx *gin.Context) {
 	}
 	DB.Create(&newUser)
 
+	token, err := common.ReleaseToken(newUser)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "system error"})
+		log.Printf("token generate error : %v", err)
+		return
+	}
+
 	//返回结果
-	log.Println(name, telephone, password)
-	response.Success(ctx, nil, "register successfully")
+	response.Success(ctx, gin.H{"token": token}, "register successfully")
 }
 
 func Login(ctx *gin.Context) {
