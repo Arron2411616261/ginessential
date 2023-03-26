@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import Vuelidate from 'vuelidate';
+import VueAxios from 'vue-axios';
+import axios from 'axios';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -15,6 +18,10 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);
+
+Vue.use(Vuelidate);
+
+Vue.use(axios, VueAxios);
 
 new Vue({
   router,
