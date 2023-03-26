@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/http"
 	"oceanlearn.teach/ginessential/common"
+	"oceanlearn.teach/ginessential/dto"
 	"oceanlearn.teach/ginessential/model"
+	"oceanlearn.teach/ginessential/response"
 	"oceanlearn.teach/ginessential/util"
 )
 
@@ -18,24 +20,24 @@ func Register(ctx *gin.Context) {
 	password := ctx.PostForm("password")
 
 	if len(telephone) != 11 {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "the length of the telephone must be 11"})
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "the length of the telephone must be 11")
 		return
 	}
 	if len(password) < 6 {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "the length of the password must be more than 6"})
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "the length of the password must be more than 6")
 		return
 	}
 	if len(name) == 0 {
 		name = util.RandomString(10)
 	}
 	if isTelephoneExist(DB, telephone) {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "this telephone exists"})
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "this telephone exists")
 		return
 	}
 
 	hasedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "hase err"})
+		response.Response(ctx, http.StatusInternalServerError, 500, nil, "hase err")
 		return
 	}
 	newUser := model.User{
@@ -47,10 +49,7 @@ func Register(ctx *gin.Context) {
 
 	//返回结果
 	log.Println(name, telephone, password)
-	ctx.JSON(200, gin.H{
-		"code": 200,
-		"msg":  "register successfully",
-	})
+	response.Success(ctx, nil, "register successfully")
 }
 
 func Login(ctx *gin.Context) {
@@ -60,11 +59,11 @@ func Login(ctx *gin.Context) {
 	password := ctx.PostForm("password")
 
 	if len(telephone) != 11 {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "the length of the telephone must be 11"})
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "the length of the telephone must be 11")
 		return
 	}
 	if len(password) < 6 {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "msg": "the length of the password must be more than 6"})
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "the length of the password must be more than 6")
 		return
 	}
 
@@ -80,13 +79,20 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	token := "111"
+	token, err := common.ReleaseToken(user)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "system error"})
+		log.Printf("token generate error : %v", err)
+		return
+	}
 
-	ctx.JSON(200, gin.H{
-		"code": 200,
-		"data": gin.H{"token": token},
-		"msg":  "login in successfully",
-	})
+	response.Success(ctx, gin.H{"token": token}, "login in successfully")
+}
+
+func Info(ctx *gin.Context) {
+	user, _ := ctx.Get("user")
+
+	ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": gin.H{"user": dto.ToUserDto(user.(model.User))}})
 }
 
 func isTelephoneExist(db *gorm.DB, telephone string) bool {
