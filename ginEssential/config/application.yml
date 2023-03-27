@@ -2,9 +2,9 @@ server:
   port: 1016
 datasource:
   driverNmae: mysql
-  host: 127.0.0.1
-  port: 3306
-  database: ginessential
+  host: gz-cynosdbmysql-grp-9jc8ybx3.sql.tencentcdb.com
+  port: 29139
+  database: nihao
   username: root
-  password: 123456
+  password: Wobujidemimale123
   charset: utf8
