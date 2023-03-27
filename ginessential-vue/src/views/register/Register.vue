@@ -1,43 +1,33 @@
 <template>
   <div class="register">
     <b-row class="mt-5">
-        <b-col
-          md="8"
-          offset-md="2"
-          lg="6"
-          offset-lg="3"
-        >
-              <b-card title="register">
-                  <b-form>
+      <b-col md="8" offset-md="2" lg="6" offset-lg="3">
+        <b-card title="register">
+          <b-form>
 
-                      <b-form-group label="name">
-                          <b-form-input v-model="$v.user.name.$model" type="text"
-                              placeholder="input your name(alternative)"></b-form-input>
-                      </b-form-group>
-                      <b-form-group label="telephone">
-                          <b-form-input v-model="$v.user.telephone.$model" type="number"
-                              placeholder="input your telephone"
-                              :state="validateState('telephone')"></b-form-input>
-                              <b-form-invalid-feedback :state="validateState('telephone')">
-        Your does not meet the requirements.
-      </b-form-invalid-feedback>
-                      </b-form-group>
-                      <b-form-group label="password">
-                          <b-form-input v-model="$v.user.password.$model" type="password"
-                              placeholder="input your password"
-                              :state="validateState('password')"
-                              ></b-form-input>
-                              <b-form-invalid-feedback :state="validateState('password')">
-        Your password must be more than 6 numbers(includes 6).
-      </b-form-invalid-feedback>
-                      </b-form-group>
-                      <b-button
-                        @click="register"
-                      variant="outline-primary" block>register</b-button>
-                  </b-form>
-              </b-card>
-          </b-col>
-      </b-row>
+            <b-form-group label="name">
+              <b-form-input v-model="$v.user.name.$model" type="text"
+                placeholder="input your name(alternative)"></b-form-input>
+            </b-form-group>
+            <b-form-group label="telephone">
+              <b-form-input v-model="$v.user.telephone.$model" type="number" placeholder="input your telephone"
+                :state="validateState('telephone')"></b-form-input>
+              <b-form-invalid-feedback :state="validateState('telephone')">
+                Your does not meet the requirements.
+              </b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group label="password">
+              <b-form-input v-model="$v.user.password.$model" type="password" placeholder="input your password"
+                :state="validateState('password')"></b-form-input>
+              <b-form-invalid-feedback :state="validateState('password')">
+                Your password must be more than 6 numbers(includes 6).
+              </b-form-invalid-feedback>
+            </b-form-group>
+            <b-button @click="register" variant="outline-primary" block>register</b-button>
+          </b-form>
+        </b-card>
+      </b-col>
+    </b-row>
   </div>
 </template>
 <script>

@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-      <navbar />
-      <b-container>
-    <router-view/>
-      </b-container>
+    <navbar />
+    <b-container>
+      <router-view />
+    </b-container>
   </div>
 </template>
 
@@ -18,6 +18,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>
