@@ -4,7 +4,6 @@
       <b-col md="8" offset-md="2" lg="6" offset-lg="3">
         <b-card title="register">
           <b-form>
-
             <b-form-group label="name">
               <b-form-input v-model="$v.user.name.$model" type="text"
                 placeholder="input your name(alternative)"></b-form-input>
@@ -34,6 +33,8 @@
 import { required, minLength } from 'vuelidate/lib/validators';
 
 import customValidator from '@/helper/validator';
+import storageService from '@/service/storageService';
+import userService from '@/service/userService';
 
 export default {
   data() {
@@ -71,11 +72,17 @@ export default {
       if (this.$v.user.$anyError) {
         return;
       }
-      const api = 'http://localhost:1016/api/auth/register';
-      this.axios.post(api, { ...this.user }).then((res) => {
-        console.log(res.data);
+      userService.register(this.user).then((res) => {
+        // 保存token
+        storageService.set(storageService.USER_TOKEN, res.data.data.token);
+        // 跳转主页
+        this.$router.replace({ name: 'Home' });
       }).catch((err) => {
-        console.log('err:', err.response.data.msg);
+        this.$bvToast.toast(err.response.data.msg, {
+          title: 'Data validation error',
+          variant: 'danger',
+          solid: true,
+        });
       });
       console.log('register');
     },

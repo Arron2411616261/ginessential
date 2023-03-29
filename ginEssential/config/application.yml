@@ -4,7 +4,7 @@ datasource:
   driverNmae: mysql
   host: gz-cynosdbmysql-grp-9jc8ybx3.sql.tencentcdb.com
   port: 29139
-  database: nihao
+  database: ginessential
   username: root
   password: Wobujidemimale123
   charset: utf8
