@@ -33,8 +33,7 @@
 import { required, minLength } from 'vuelidate/lib/validators';
 
 import customValidator from '@/helper/validator';
-import storageService from '@/service/storageService';
-import userService from '@/service/userService';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -63,6 +62,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('userModule', { userRegister: 'register' }),
     validateState(name) {
       const { $dirty, $error } = this.$v.user[name];
       return $dirty ? !$error : null;
@@ -72,15 +72,8 @@ export default {
       if (this.$v.user.$anyError) {
         return;
       }
-      userService.register(this.user).then((res) => {
-        // 保存token
-        storageService.set(storageService.USER_TOKEN, res.data.data.token);
-        userService.info().then((response) => {
-          // 保存用户信息
-          storageService.set(storageService.USER_INFO, JSON.stringify(response.data.data.user));
-          // 跳转主页
-          this.$router.replace({ name: 'Home' });
-        });
+      this.userRegister(this.user).then(() => {
+        this.$router.replace({ name: 'Home' });
       }).catch((err) => {
         this.$bvToast.toast(err.response.data.msg, {
           title: 'Data validation error',
