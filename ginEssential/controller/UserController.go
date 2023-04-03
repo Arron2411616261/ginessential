@@ -64,8 +64,11 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	DB := common.GetDB()
 
-	telephone := ctx.PostForm("telephone")
-	password := ctx.PostForm("password")
+	var requestUser = model.User{}
+	ctx.Bind(&requestUser)
+
+	telephone := requestUser.Telephone
+	password := requestUser.Password
 
 	if len(telephone) != 11 {
 		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "the length of the telephone must be 11")
@@ -76,6 +79,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
+	// 判断手机号是否存在
 	var user model.User
 	DB.Where("telephone = ?", telephone).First(&user)
 	if user.ID == 0 {

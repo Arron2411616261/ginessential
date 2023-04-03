@@ -29,6 +29,7 @@
 import { required, minLength } from 'vuelidate/lib/validators';
 
 import customValidator from '@/helper/validator';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -53,12 +54,26 @@ export default {
     },
   },
   methods: {
+    ...mapActions('userModule', { userlogin: 'login' }),
     validateState(name) {
       const { $dirty, $error } = this.$v.user[name];
       return $dirty ? !$error : null;
     },
     login() {
-      console.log('login');
+      this.$v.user.$touch();
+      if (this.$v.user.$anyError) {
+        return;
+      }
+
+      this.userlogin(this.user).then(() => {
+        this.$router.replace({ name: 'Home' });
+      }).catch((err) => {
+        this.$bvToast.toast(err.response.data.msg, {
+          title: 'Data validation error',
+          variant: 'danger',
+          solid: true,
+        });
+      });
     },
   },
 };
