@@ -20,7 +20,7 @@
                 <em>{{ userInfo.name }}</em>
               </template>
               <b-dropdown-item href="#">Homepage</b-dropdown-item>
-              <b-dropdown-item href="#">Login in</b-dropdown-item>
+              <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
             <div v-if="!userInfo">
               <b-nav-item v-if="$router.name != 'login'" @click="$router.replace({ name: 'login' })">login</b-nav-item>
@@ -34,12 +34,14 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: mapState({
     userInfo: (state) => state.userModule.userInfo,
   }),
+
+  methods: mapActions('userModule', ['logout']),
 };
 </script>
 <style lang="scss" scoped></style>
