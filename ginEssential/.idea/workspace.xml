@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3586a08a-bd0f-4b3c-a10f-2cf1a621f97b" name="Changes" comment="创建category表 并测试create">
-      <change afterPath="$PROJECT_DIR$/controller/CategoryController.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controller/RestController.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/Category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/time.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes.go" afterDir="false" />
-    </list>
+    <list default="true" id="3586a08a-bd0f-4b3c-a10f-2cf1a621f97b" name="Changes" comment="创建category表 并测试create" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
