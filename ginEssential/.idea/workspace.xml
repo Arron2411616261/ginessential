@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3586a08a-bd0f-4b3c-a10f-2cf1a621f97b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/UserController.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/UserController.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ginessential-vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../ginessential-vue/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ginessential-vue/src/views/layout/Navbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../ginessential-vue/src/views/layout/Navbar.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

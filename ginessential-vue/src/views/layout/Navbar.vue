@@ -19,12 +19,12 @@
               <template v-slot:button-content>
                 <em>{{ userInfo.name }}</em>
               </template>
-              <b-dropdown-item href="#">Homepage</b-dropdown-item>
+              <b-dropdown-item @click="$router.push({ name: 'profile' })">Homepage</b-dropdown-item>
               <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
             <div v-if="!userInfo">
-              <b-nav-item v-if="$router.name != 'login'" @click="$router.replace({ name: 'login' })">login</b-nav-item>
-              <b-nav-item v-if="$router.name != 'regiser'"
+              <b-nav-item v-if="$route.name != 'login'" @click="$router.replace({ name: 'login' })">login</b-nav-item>
+              <b-nav-item v-if="$route.name != 'register'"
                 @click="$router.replace({ name: 'register' })">register</b-nav-item>
             </div>
           </b-navbar-nav>
