@@ -6,6 +6,7 @@ import (
 	"oceanlearn.teach/ginessential/common"
 	"oceanlearn.teach/ginessential/model"
 	"oceanlearn.teach/ginessential/response"
+	"strconv"
 )
 
 type ICategoryController interface {
@@ -37,16 +38,47 @@ func (c CategoryController) Create(ctx *gin.Context) {
 }
 
 func (c CategoryController) Update(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	var requestCategory model.Category
+	ctx.Bind(&requestCategory)
+
+	if requestCategory.Name == "" {
+		response.Fail(ctx, "Data validation error, category name is required", nil)
+	}
+
+	categoryId, _ := strconv.Atoi(ctx.Params.ByName("id"))
+
+	var updateCategory model.Category
+	err := c.DB.First(&updateCategory, categoryId).Error
+	if err != nil {
+		response.Fail(ctx, "category does not exist", nil)
+		return
+	}
+
+	c.DB.Model(&updateCategory).Update("name", requestCategory.Name)
+
+	response.Success(ctx, gin.H{"category:": updateCategory}, "successfully modified")
 }
 
 func (c CategoryController) Show(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	categoryId, _ := strconv.Atoi(ctx.Params.ByName("id"))
+
+	var category model.Category
+	err := c.DB.First(&category, categoryId).Error
+	if err != nil {
+		response.Fail(ctx, "category does not exist", nil)
+		return
+	}
+
+	response.Success(ctx, gin.H{"category": category}, "")
 }
 
 func (c CategoryController) Delete(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	categoryId, _ := strconv.Atoi(ctx.Params.ByName("id"))
+
+	if err := c.DB.Delete(model.Category{}, categoryId).Error; err != nil {
+		response.Fail(ctx, "delete failed, please try again", nil)
+		return
+	}
+
+	response.Success(ctx, nil, "")
 }
