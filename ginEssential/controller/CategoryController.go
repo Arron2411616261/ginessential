@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
-	"oceanlearn.teach/ginessential/common"
 	"oceanlearn.teach/ginessential/model"
+	"oceanlearn.teach/ginessential/repository"
 	"oceanlearn.teach/ginessential/response"
+	"oceanlearn.teach/ginessential/vo"
 	"strconv"
 )
 
@@ -14,56 +14,58 @@ type ICategoryController interface {
 }
 
 type CategoryController struct {
-	DB *gorm.DB
+	Repository repository.CategoryRepository
 }
 
 func NewCategoryController() ICategoryController {
-	db := common.GetDB()
-	db.AutoMigrate(model.Category{})
+	repository := repository.NewCategoryRepository()
+	repository.DB.AutoMigrate(model.Category{})
 
-	return CategoryController{DB: db}
+	return CategoryController{Repository: repository}
 }
 
 func (c CategoryController) Create(ctx *gin.Context) {
-	var requestCategory model.Category
-	ctx.Bind(&requestCategory)
-
-	if requestCategory.Name == "" {
+	var requestCategory vo.CreateCategoryRequest
+	if err := ctx.ShouldBind(&requestCategory); err != nil {
 		response.Fail(ctx, "Data validation error, category name is required", nil)
+		return
 	}
 
-	c.DB.Create(&requestCategory)
-
-	response.Success(ctx, gin.H{"category": requestCategory}, "")
+	category, err := c.Repository.Create(requestCategory.Name)
+	if err != nil {
+		panic(err)
+		return
+	}
+	response.Success(ctx, gin.H{"category": category}, "")
 }
 
 func (c CategoryController) Update(ctx *gin.Context) {
-	var requestCategory model.Category
-	ctx.Bind(&requestCategory)
-
-	if requestCategory.Name == "" {
+	var requestCategory vo.CreateCategoryRequest
+	if err := ctx.ShouldBind(&requestCategory); err != nil {
 		response.Fail(ctx, "Data validation error, category name is required", nil)
+		return
 	}
 
 	categoryId, _ := strconv.Atoi(ctx.Params.ByName("id"))
 
-	var updateCategory model.Category
-	err := c.DB.First(&updateCategory, categoryId).Error
+	updateCategory, err := c.Repository.SelectById(categoryId)
 	if err != nil {
 		response.Fail(ctx, "category does not exist", nil)
 		return
 	}
 
-	c.DB.Model(&updateCategory).Update("name", requestCategory.Name)
+	category, err := c.Repository.Update(*updateCategory, requestCategory.Name)
+	if err != nil {
+		panic(err)
+	}
 
-	response.Success(ctx, gin.H{"category:": updateCategory}, "successfully modified")
+	response.Success(ctx, gin.H{"category:": category}, "successfully modified")
 }
 
 func (c CategoryController) Show(ctx *gin.Context) {
 	categoryId, _ := strconv.Atoi(ctx.Params.ByName("id"))
 
-	var category model.Category
-	err := c.DB.First(&category, categoryId).Error
+	category, err := c.Repository.SelectById(categoryId)
 	if err != nil {
 		response.Fail(ctx, "category does not exist", nil)
 		return
@@ -75,7 +77,7 @@ func (c CategoryController) Show(ctx *gin.Context) {
 func (c CategoryController) Delete(ctx *gin.Context) {
 	categoryId, _ := strconv.Atoi(ctx.Params.ByName("id"))
 
-	if err := c.DB.Delete(model.Category{}, categoryId).Error; err != nil {
+	if err := c.Repository.DeleteById(categoryId); err != nil {
 		response.Fail(ctx, "delete failed, please try again", nil)
 		return
 	}
