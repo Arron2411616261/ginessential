@@ -143,4 +143,10 @@
 
 ### 部分测试报告展示
 
-[login_test](./login_test.png)
+- 登录
+  
+  ![login_test](D:\Desktop\ginessential\image_test\login_test.png)
+
+- 获取聊天列表
+  
+  ![getMsg_test](D:\Desktop\ginessential\image_test\getMsg_test.png)
