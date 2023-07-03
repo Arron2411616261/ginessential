@@ -146,7 +146,13 @@
 - 登录
   
   ![login_test](image_test/login_test.png)
+  
+  ![login_frontend](image_test/login_frontend.png)
+  
+  ![login_succeed](image_test/login_succeed.png)
 
 - 获取聊天列表
   
   ![getMsg_test](image_test/getMsg_test.png)
+  
+  ![getMsg_frontend](image_test/getMsg_frontend.png)
