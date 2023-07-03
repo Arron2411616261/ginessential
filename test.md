@@ -145,7 +145,7 @@
 
 - 登录
   
-  ![login_test](D:\Desktop\ginessential\image_test\login_test.png)
+  ![login_test](../image_test/login_test.png)
 
 - 获取聊天列表
   
